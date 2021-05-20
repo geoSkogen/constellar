@@ -9,10 +9,10 @@ function assemble_row(row_index, col_count, row_count, arg) {
   var pre_str = arg ? '' : 'grid'
   var name_str = arg ? 'cell' : 'gridspace'
   var bound_str = ( !arg && row_index===row_count-1 ) ? ' gridbound_bottom' : ''
-  var data_str = arg ? 'gray,gainsboro' : 'brickred,cornflowerblue'
+  var data_str = arg ? 'grey,gainsboro' : 'brickred,cornflowerblue'
   for (var i = 0; i < col_count; i++){
     var cell = document.createElement('div')
-    bound_str += (i===col_count-1) ? ' gridbound_right' : ''
+    bound_str += (i===col_count-1 && !arg) ? ' gridbound_right' : ''
     cell.id = pre_str + '_' + row_index.toString() + '_' + i.toString()
     cell.className = name_str + bound_str
     cell.setAttribute('data-toggle',data_str)
@@ -62,6 +62,14 @@ function show_cell_path(row,col,dir) {
   }
 }
 
+function open_connector_modal() {
+  document.querySelector('#connector-modal').style.display = 'block'
+}
+
+function close_connector_modal() {
+  document.querySelector('#connector-modal').style.display = 'none'
+}
+
 // DOM render elements
 
 assemble_table(canvas,24,24,true)
@@ -74,7 +82,20 @@ document.querySelectorAll('.cell').forEach( function (cell) {
   cell.addEventListener('click', function (event) {
 
     var arr = this.getAttribute('data-toggle').split(',')
+    var open = ( arr[0]==='grey' ) ? true : false
     this.style.backgroundColor = arr[0]
     this.setAttribute('data-toggle',arr.reverse().join(','))
-   })
+
+    if (open) {
+      open_connector_modal()
+    } else {
+      close_connector_modal()
+    }
+  })
 })
+
+document.querySelector('#close-connector-modal').
+  addEventListener('click', function (event) {
+
+  close_connector_modal()
+} )

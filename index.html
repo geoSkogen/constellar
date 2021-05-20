@@ -24,7 +24,28 @@
 
 </head>
 <body>
-  <div id="headband" class="relshell"></div>
+  <div id="headband" class="relshell">
+    <div id="connector-modal" class="modal">
+
+      <div id="connector-modal-body">
+        <div class="flex-row flex-center">
+
+          <div id="select-connection-label">
+            click a new destination point or choose from the list
+          </div>
+
+          <select id="select-connection">
+            <option value="null">null</option>
+          </select>
+
+          <div class="flex-row flex-end">
+            <div id="close-connector-modal" class="x-out">&times;</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
   <div id="appshell">
     <div class="flex-row flex-center">
       <article id="gameboard" class="sui-generis0"></article>
@@ -39,7 +60,7 @@
 
 </body>
 
-<script src="script/dominator.js"></script>
 <script src="script/tracer.js"></script>
+<script src="script/dominator.js"></script>
 
 </html>
