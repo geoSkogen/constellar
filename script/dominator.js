@@ -66,6 +66,7 @@ function open_connector_modal(target_el) {
   document.querySelector('#connector-modal').style.display = 'block'
   tracer.active_nodes[0] = target_el
   tracer.active_pair[0] = tracer.count
+  tracer.count++
 }
 
 function close_connector_modal(target_el) {
