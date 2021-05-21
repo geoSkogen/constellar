@@ -62,12 +62,29 @@ function show_cell_path(row,col,dir) {
   }
 }
 
-function open_connector_modal() {
+function open_connector_modal(target_el) {
   document.querySelector('#connector-modal').style.display = 'block'
+  tracer.active_nodes[0] = target_el
+  tracer.active_pair[0] = tracer.count
 }
 
-function close_connector_modal() {
+function close_connector_modal(target_el) {
   document.querySelector('#connector-modal').style.display = 'none'
+  tracer.active_nodes = []
+  tracer.active_pair = []
+}
+
+function mark_cell(cell_el) {
+  var arr = cell_el.getAttribute('data-toggle').split(',')
+  var open = ( arr[0]==='grey' ) ? true : false
+  //
+  cell_el.style.backgroundColor = arr[0]
+  cell_el.setAttribute('data-toggle',arr.reverse().join(','))
+  return open
+}
+
+function label_cell(cell_el) {
+  cell_el.innerHTML = tracer.count.toString()
 }
 
 // DOM render elements
@@ -81,16 +98,22 @@ document.querySelectorAll('.cell').forEach( function (cell) {
 
   cell.addEventListener('click', function (event) {
 
-    var arr = this.getAttribute('data-toggle').split(',')
-    var open = ( arr[0]==='grey' ) ? true : false
-    this.style.backgroundColor = arr[0]
-    this.setAttribute('data-toggle',arr.reverse().join(','))
+    if ( !tracer.active_pair.length || this.id===tracer.active_nodes[0].id ) {
 
-    if (open) {
-      open_connector_modal()
+      var open = mark_cell(this)
+      //
+      if (open) {
+        open_connector_modal(this)
+        label_cell(this)
+      } else {
+        close_connector_modal(this)
+      }
+
     } else {
-      close_connector_modal()
+
+      console.log('tracer.active_pair has length')
     }
+
   })
 })
 
@@ -98,4 +121,5 @@ document.querySelector('#close-connector-modal').
   addEventListener('click', function (event) {
 
   close_connector_modal()
-} )
+
+})
