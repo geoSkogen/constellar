@@ -1,11 +1,83 @@
 'use strict'
 var tracer = {
-  link_points : function (a,b) {
+  join_points: function () {
 
+    var dir = null
+
+    var start = this.active_nodes[0].id.slice(
+      1,this.active_nodes[0].id.length).
+        split('_')
+
+    var end = this.active_nodes[1].id.slice(
+      1,this.active_nodes[1].id.length).
+        split('_')
+
+    for (var i = 0; i < start.length; i++) {
+      start[i] = Number(start[i])
+      end[i] = Number(end[i])
+    }
+
+    var vert = end[0]-start[0]
+    var horiz = end[1]-start[1]
+
+    if ( vert > 0 ) {
+      // decrement row index from end to start - line goes up
+      // use column start point as x value
+      this.link_points( end[0], start[0], end[1], 'north' )
+    } else {
+      // decrement row index from start to end - line goes down
+      // use column start point as x value
+      this.link_points( start[0], end[0], end[1], 'south' )
+    }
+
+    if ( horiz > 0 ) {
+
+      this.link_points( end[1],start[1],end[0], 'west' )
+    } else {
+
+      this.link_points(start[1], end[1],end[0], 'east' )
+    }
+
+    //console.log(start)
+    //console.log(end)
+
+    this.data_points.push([
+      this.active_pair[0],
+      this.active_pair[1],
+      'x'
+    ])
+
+  },
+  link_points : function (a,b,axis,dir) {
+    var dirs = ['north','east','south','west']
+    var trace_row = [null,null,null]
+    // for travel along the y axis, keep column constant
+    // for travel along the x axis, keep row constant
+    var axis_index = (!dirs.indexOf(dir)%2) ? 1 : 0
+    var var_index = (axis_index) ? 0 : 1
+
+    for (var i = a; i < b; i--) {
+      trace_row[axis_index] = axis
+      trace_row[var_index] = i
+      trace_row[2] = dirs.indexOf(dir)
+      data_trace.push(trace_row)
+    }
+    console.log('data trace')
+    console.log(this.data_trace)
+  },
+  update_state : function (target_el) {
+    this.active_nodes.push(target_el)
+    this.active_pair.push(this.count)
+    this.count++
+  },
+  nullify_state : function () {
+    this.active_pair = []
+    this.active_nodes = []
   },
   count : 0,
   data_points : [],
   active_pair: [],
-  active_nodes : []
+  active_nodes : [],
+  data_trace : []
 
 }

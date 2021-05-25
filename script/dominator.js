@@ -64,22 +64,19 @@ function show_cell_path(row,col,dir) {
 
 function open_connector_modal(target_el) {
   document.querySelector('#connector-modal').style.display = 'block'
-  tracer.active_nodes[0] = target_el
-  tracer.active_pair[0] = tracer.count
-  tracer.count++
 }
 
 function close_connector_modal(target_el) {
   document.querySelector('#connector-modal').style.display = 'none'
-  tracer.active_nodes = []
-  tracer.active_pair = []
 }
+
 
 function mark_cell(cell_el) {
   var arr = cell_el.getAttribute('data-toggle').split(',')
   var open = ( arr[0]==='grey' ) ? true : false
   //
   cell_el.style.backgroundColor = arr[0]
+  cell_el.innerHTML = (open) ? cell_el.innerHTML : ''
   cell_el.setAttribute('data-toggle',arr.reverse().join(','))
   return open
 }
@@ -99,22 +96,33 @@ document.querySelectorAll('.cell').forEach( function (cell) {
 
   cell.addEventListener('click', function (event) {
 
-    if ( !tracer.active_pair.length || this.id===tracer.active_nodes[0].id ) {
+    var open = mark_cell(this)
+    //
+    if (open) {
 
-      var open = mark_cell(this)
-      //
-      if (open) {
-        open_connector_modal(this)
-        label_cell(this)
-      } else {
-        close_connector_modal(this)
+      open_connector_modal(this)
+      tracer.update_state(this)
+      label_cell(this)
+
+      //console.log('is processing pair?')
+      //console.log(tracer.active_pair.length)
+      //console.log(this.id)
+      //console.log(tracer.active_nodes[0].id)
+
+      if ( tracer.active_pair.length && this.id!=tracer.active_nodes[0].id ) {
+
+        console.log(tracer.active_pair)
+
+        tracer.join_points()
+        close_connector_modal()
+
       }
 
     } else {
 
-      console.log('tracer.active_pair has length')
+      close_connector_modal(this)
+      tracer.nullify_state()
     }
-
   })
 })
 
