@@ -16,31 +16,36 @@ var tracer = {
       start[i] = Number(start[i])
       end[i] = Number(end[i])
     }
-
+    console.log(start)
+    console.log(end)
     var vert = end[0]-start[0]
     var horiz = end[1]-start[1]
 
     if ( vert > 0 ) {
+      console.log('positive vert')
       // decrement row index from end to start - line goes up
       // use column start point as x value
       this.link_points( end[0], start[0], end[1], 'north' )
-    } else {
+    } else if (vert < 0) {
+      console.log('negative vert')
       // decrement row index from start to end - line goes down
       // use column start point as x value
       this.link_points( start[0], end[0], end[1], 'south' )
+    } else {
+      console.log('no vert')
     }
 
     if ( horiz > 0 ) {
-
+      console.log('positive horiz')
       this.link_points( end[1],start[1],end[0], 'west' )
+    } else if (horiz < 0) {
+      console.log('negative horiz')
+      this.link_points( start[1], end[1],end[0], 'east' )
     } else {
-
-      this.link_points(start[1], end[1],end[0], 'east' )
+      console.log('no horiz')
     }
-
     //console.log(start)
     //console.log(end)
-
     this.data_points.push([
       this.active_pair[0],
       this.active_pair[1],
@@ -50,19 +55,33 @@ var tracer = {
   },
   link_points : function (a,b,axis,dir) {
     var dirs = ['north','east','south','west']
-    var trace_row = [null,null,null]
+    var trace_row = []
     // for travel along the y axis, keep column constant
     // for travel along the x axis, keep row constant
     var axis_index = (!dirs.indexOf(dir)%2) ? 1 : 0
     var var_index = (axis_index) ? 0 : 1
+    var intval = -1
 
-    for (var i = a; i < b; i--) {
+    for (var i = a; i > b; i--) {
+      intval = i
       trace_row[axis_index] = axis
-      trace_row[var_index] = i
+      trace_row[var_index] = intval
       trace_row[2] = dirs.indexOf(dir)
-      data_trace.push(trace_row)
+      console.log('i value is:')
+      console.log(i)
+      console.log('var index is ')
+      console.log(var_index)
+      console.log('element ' + (var_index+1).toString() + ' of the following row should be ' + i.toString())
+      console.log(trace_row)
+      this.data_trace.push(trace_row)
+      console.log('rolling data trace')
+      console.log(
+        this.data_trace[this.data_trace.length-1][0].toString() + '-' +
+        this.data_trace[this.data_trace.length-1][1].toString() + '-' +
+        this.data_trace[this.data_trace.length-1][2].toString() + '-'
+      )
     }
-    console.log('data trace')
+    console.log('summary data trace')
     console.log(this.data_trace)
   },
   update_state : function (target_el) {
