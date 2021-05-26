@@ -1,9 +1,5 @@
 'use strict'
 
-var canvas = document.getElementById('gameboard');
-var grid = document.getElementById('matrix');
-
-
 function assemble_row(row_index, col_count, row_count, arg) {
   var wrapper = document.createElement('section')
   var pre_str = arg ? '' : 'grid'
@@ -91,12 +87,14 @@ function label_cell(cell_el) {
   cell_el.innerHTML = tracer.count.toString()
 }
 
-// DOM render elements
+// render DOM elements
+var canvas = document.getElementById('gameboard');
+var grid = document.getElementById('matrix');
 
 assemble_table(canvas,24,24,true)
 assemble_table(grid,23,23,false)
 
-// DOM register events
+// register DOM events
 
 document.querySelectorAll('.cell').forEach( function (cell) {
 
