@@ -55,7 +55,6 @@ var tracer = {
   },
   link_points : function (a,b,axis,dir) {
     var dirs = ['north','east','south','west']
-    var trace_row = []
     // for travel along the y axis, keep column constant
     // for travel along the x axis, keep row constant
     var axis_index = (!dirs.indexOf(dir)%2) ? 1 : 0
@@ -63,6 +62,7 @@ var tracer = {
     var intval = -1
 
     for (var i = a; i > b; i--) {
+      var trace_row = []
       intval = i
       trace_row[axis_index] = axis
       trace_row[var_index] = intval
