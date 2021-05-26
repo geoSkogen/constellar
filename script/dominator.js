@@ -117,13 +117,15 @@ document.querySelectorAll('.cell').forEach( function (cell) {
 
       if ( tracer.active_pair.length && this.id!=tracer.active_nodes[0].id ) {
 
-        console.log(tracer.active_pair)
+        //console.log(tracer.active_pair)
 
         tracer.join_points()
 
         assemble_trace(tracer.data_trace)
 
         close_connector_modal()
+
+        tracer.nullify_state()
 
       }
 
