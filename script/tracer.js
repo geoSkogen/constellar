@@ -46,11 +46,6 @@ var tracer = {
     }
     //console.log(start)
     //console.log(end)
-    this.data_points.push([
-      this.active_pair[0],
-      this.active_pair[1],
-      'x'
-    ])
 
   },
   link_points : function (a,b,axis,dir) {
@@ -92,18 +87,40 @@ var tracer = {
     */
   },
   update_state : function (target_el) {
+    var cell_id =  this.count
+    var incrementor = 1
+    if (Number(target_el.getAttribute('active'))) {
+      cell_id = target_el.getAttribute('active')
+      incrementor = 0
+    }
     this.active_nodes.push(target_el)
-    this.active_pair.push(this.count)
-    this.count++
+    this.active_pair.push(cell_id)
+    this.count += incrementor
   },
+
   nullify_state : function () {
     this.active_pair = []
     this.active_nodes = []
+    this.data_trace = []
   },
+
+  update_record : function () {
+    var row = [
+      this.active_pair[0],
+      this.active_pair[1],
+      this.data_trace.length
+    ]
+    this.data_points.push(row)
+  },
+
   count : 0,
+  // id numbers of all connected points, with distance (in cells)
   data_points : [],
+  // id numbers of points being connected
   active_pair: [],
+  // html elements of points being connected
   active_nodes : [],
+  // coordinate points of path between points being connected
   data_trace : []
 
 }

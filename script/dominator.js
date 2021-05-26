@@ -1,6 +1,8 @@
 'use strict'
 
-function assemble_row(row_index, col_count, row_count, arg) {
+var dominator = {
+
+assemble_row: function (row_index, col_count, row_count, arg) {
   var wrapper = document.createElement('section')
   var pre_str = arg ? '' : 'grid'
   var name_str = arg ? 'cell' : 'gridspace'
@@ -17,23 +19,24 @@ function assemble_row(row_index, col_count, row_count, arg) {
   wrapper.id = pre_str + '_' + row_index.toString()
   wrapper.className = 'row flex-row flex-center'
   return wrapper
-}
+},
 
-function assemble_table(wrapper,row_count,col_count,bool) {
+assemble_table: function (wrapper,row_count,col_count,bool) {
   for (var i = 0; i < row_count; i++) {
-    var row = assemble_row(i,col_count,row_count,bool)
+    var row = this.assemble_row(i,col_count,row_count,bool)
     wrapper.appendChild(row)
   }
   return wrapper
-}
+},
 
-function assemble_trace(table) {
+assemble_trace : function (table) {
+  var self = this
   table.forEach( function (row) {
-    show_cell_path(row[0],row[1],row[2])
+    self.show_cell_path(row[0],row[1],row[2])
   })
-}
+},
 
-function show_cell_path(row,col,dir) {
+show_cell_path: function (row,col,dir) {
   var el = {}
   var axis = true
   switch (dir) {
@@ -62,82 +65,41 @@ function show_cell_path(row,col,dir) {
   } else {
     el.style.borderTop = '4px solid black'
   }
-}
+},
 
-function open_connector_modal(target_el) {
+open_connector_modal: function (target_el) {
   document.querySelector('#connector-modal').style.display = 'block'
-}
+},
 
-function close_connector_modal(target_el) {
+close_connector_modal: function (target_el) {
   document.querySelector('#connector-modal').style.display = 'none'
-}
+},
 
-
-function mark_cell(cell_el) {
+mark_cell :function (cell_el) {
   var arr = cell_el.getAttribute('data-toggle').split(',')
-  var open = ( arr[0]==='grey' ) ? true : false
-  //
-  cell_el.style.backgroundColor = arr[0]
-  cell_el.innerHTML = (open) ? cell_el.innerHTML : ''
-  cell_el.setAttribute('data-toggle',arr.reverse().join(','))
+  var active = cell_el.getAttribute('active')
+  var open = ( active || arr[0]==='grey'  ) ? true : false
+  if (!active) {
+    cell_el.style.backgroundColor = arr[0]
+    cell_el.innerHTML = (open) ? cell_el.innerHTML : ''
+    cell_el.setAttribute('data-toggle',arr.reverse().join(','))
+  }
   return open
-}
+},
 
-function label_cell(cell_el) {
-  cell_el.innerHTML = tracer.count.toString()
-}
+label_cell : function (cell_el) {
+  var active = cell_el.getAttribute('active')
+  if (!active) {
+    cell_el.innerHTML = tracer.count.toString()
+  }
+},
 
-// render DOM elements
-var canvas = document.getElementById('gameboard');
-var grid = document.getElementById('matrix');
-
-assemble_table(canvas,24,24,true)
-assemble_table(grid,23,23,false)
-
-// register DOM events
-
-document.querySelectorAll('.cell').forEach( function (cell) {
-
-  cell.addEventListener('click', function (event) {
-
-    var open = mark_cell(this)
-    //
-    if (open) {
-
-      open_connector_modal(this)
-      tracer.update_state(this)
-      label_cell(this)
-
-      //console.log('is processing pair?')
-      //console.log(tracer.active_pair.length)
-      //console.log(this.id)
-      //console.log(tracer.active_nodes[0].id)
-
-      if ( tracer.active_pair.length && this.id!=tracer.active_nodes[0].id ) {
-
-        //console.log(tracer.active_pair)
-
-        tracer.join_points()
-
-        assemble_trace(tracer.data_trace)
-
-        close_connector_modal()
-
-        tracer.nullify_state()
-
-      }
-
-    } else {
-
-      close_connector_modal(this)
-      tracer.nullify_state()
+assimilate_cells : function (node_arr,id_arr) {
+  for (var i = 0; i < node_arr.length; i++) {
+    if (!node_arr[i].getAttribute('active')) {
+      node_arr[i].setAttribute('active',id_arr[i].toString())
     }
-  })
-})
+  }
+}
 
-document.querySelector('#close-connector-modal').
-  addEventListener('click', function (event) {
-
-  close_connector_modal()
-
-})
+} // end dominator object
