@@ -25,12 +25,12 @@ var tracer = {
       console.log('positive vert')
       // decrement row index from end to start - line goes up
       // use column start point as x value
-      this.link_points( end[0], start[0], end[1], 'north' )
+      this.link_points( end[0], start[0], start[1], 'north' )
     } else if (vert < 0) {
       console.log('negative vert')
       // decrement row index from start to end - line goes down
       // use column start point as x value
-      this.link_points( start[0], end[0], end[1], 'south' )
+      this.link_points( start[0], end[0], start[1], 'south' )
     } else {
       console.log('no vert')
     }
@@ -59,13 +59,12 @@ var tracer = {
     // for travel along the x axis, keep row constant
     var axis_index = (!dirs.indexOf(dir)%2) ? 1 : 0
     var var_index = (axis_index) ? 0 : 1
-    var intval = -1
 
     for (var i = a; i > b; i--) {
       var trace_row = []
-      intval = i
       trace_row[axis_index] = axis
-      trace_row[var_index] = intval
+      trace_row[var_index] = i
+
       trace_row[2] = dirs.indexOf(dir)
       console.log('i value is:')
       console.log(i)
