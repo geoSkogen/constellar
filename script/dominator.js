@@ -31,6 +31,12 @@ function assemble_table(wrapper,row_count,col_count,bool) {
   return wrapper
 }
 
+function assemble_trace(table) {
+  table.forEach( function (row) {
+    show_cell_path(row[0],row[1],row[2])
+  })
+}
+
 function show_cell_path(row,col,dir) {
   var el = {}
   var axis = true
@@ -114,6 +120,9 @@ document.querySelectorAll('.cell').forEach( function (cell) {
         console.log(tracer.active_pair)
 
         tracer.join_points()
+
+        assemble_trace(tracer.data_trace)
+
         close_connector_modal()
 
       }
