@@ -19,16 +19,16 @@ document.querySelectorAll('.cell').forEach( function (cell) {
       tracer.update_state(this)
       // show its index number
       dominator.label_cell(this)
-
+      /*
       console.log('is processing pair?')
       console.log(tracer.active_pair.length)
       console.log(this.id)
       console.log(tracer.active_nodes)
-
+      */
       // if selected item is added to an existing queue and not IN the queue already
       if ( tracer.active_pair.length && this.id!=tracer.active_nodes[0].id ) {
 
-        console.log(tracer.active_pair)
+        //console.log(tracer.active_pair)
 
         // draw a line -
         // load up the tracer object with the coordinate path between queued items
@@ -58,5 +58,11 @@ document.querySelector('#close-connector-modal').
   addEventListener('click', function (event) {
   // X button
   dominator.close_connector_modal()
+})
 
+dominator.select.addEventListener('change', function (event) {
+  //
+  var target_el = document.querySelector( '#' + tracer.el_ids[this.value] )
+  console.log(target_el)
+  target_el.click()
 })

@@ -2,6 +2,8 @@
 
 var dominator = {
 
+select: document.querySelector('#select-connection'),
+
 assemble_row: function (row_index, col_count, row_count, arg) {
   var wrapper = document.createElement('section')
   var pre_str = arg ? '' : 'grid'
@@ -27,6 +29,29 @@ assemble_table: function (wrapper,row_count,col_count,bool) {
     wrapper.appendChild(row)
   }
   return wrapper
+},
+
+assemble_select_options : function (el) {
+
+  this.select.innerHTML = ''
+
+  for (var i = 0; i < tracer.count+1; i++) {
+
+    var content = (i).toString()
+    var val = content
+
+    if (i===0) {
+      content = '(none)'
+      val = 'null'
+    }
+
+    if (Number(el.innerHTML)!=i+1) {
+      var opt_tag = document.createElement('option')
+      opt_tag.innerHTML = content
+      opt_tag.className = 'connection-option'
+      this.select.appendChild(opt_tag)
+    }
+  }
 },
 
 assemble_trace : function (table) {
@@ -69,6 +94,7 @@ show_cell_path: function (row,col,dir) {
 
 open_connector_modal: function (target_el) {
   document.querySelector('#connector-modal').style.display = 'block'
+  this.assemble_select_options(target_el)
 },
 
 close_connector_modal: function (target_el) {
@@ -97,7 +123,7 @@ label_cell : function (cell_el) {
 assimilate_cells : function (node_arr,id_arr) {
   for (var i = 0; i < node_arr.length; i++) {
     if (!node_arr[i].getAttribute('active')) {
-      node_arr[i].setAttribute('active',id_arr[i].toString())
+      node_arr[i].setAttribute('active',(id_arr[i]+1).toString())
     }
   }
 }

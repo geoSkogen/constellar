@@ -46,6 +46,9 @@ var tracer = {
     }
     //console.log(start)
     //console.log(end)
+    this.el_ids[this.active_pair[0]+1] = this.active_nodes[0].id
+    this.el_ids[this.active_pair[1]+1] = this.active_nodes[1].id
+    console.log(this.el_ids)
 
   },
   link_points : function (a,b,axis,dir) {
@@ -71,7 +74,7 @@ var tracer = {
       console.log(var_index)
       console.log('element ' + (var_index+1).toString() + ' of the following row should be ' + i.toString())
       */
-      console.log(trace_row)
+      //console.log(trace_row)
       /*
       console.log('rolling data trace')
       console.log(
@@ -121,6 +124,8 @@ var tracer = {
   // html elements of points being connected
   active_nodes : [],
   // coordinate points of path between points being connected
-  data_trace : []
+  data_trace : [],
+  //
+  el_ids : {}
 
 }
